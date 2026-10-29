@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交通ナビ 配布チラシ</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/tabler-icons.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans JP',sans-serif;background:#fff;color:#1a1a1a;display:flex;justify-content:center;padding:20px}
+.page{width:210mm;max-width:100%;padding:20mm 18mm;position:relative}
+.top-label{text-align:center;font-size:11px;font-weight:600;color:#fff;background:#2563eb;display:inline-block;padding:4px 20px;border-radius:0 0 8px 8px;letter-spacing:1px}
+.top-label-wrap{text-align:center;margin-bottom:16px}
+.title-block{text-align:center;margin-bottom:8px}
+.title-block h1{font-size:32px;font-weight:900;letter-spacing:2px;color:#111}
+.title-block h1 span{color:#2563eb}
+.title-block .sub{font-size:14px;color:#666;margin-top:4px}
+.divider{width:60px;height:3px;background:linear-gradient(90deg,#2563eb,#60a5fa);margin:16px auto;border-radius:2px}
+.main-row{display:flex;gap:28px;align-items:flex-start;margin-bottom:24px}
+.qr-col{flex-shrink:0;text-align:center}
+#qr{margin:0 auto 8px}
+.qr-url{font-size:9px;color:#999;word-break:break-all;max-width:180px;margin:0 auto;line-height:1.4}
+.scan-label{font-size:13px;font-weight:700;color:#2563eb;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:4px}
+.features-col{flex:1}
+.features-title{font-size:16px;font-weight:700;color:#111;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #e5e7eb;display:flex;align-items:center;gap:6px}
+.features-title i{color:#2563eb}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+.feat{display:flex;gap:10px;align-items:flex-start}
+.feat-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.feat-icon.blue{background:#eff6ff;color:#2563eb}
+.feat-icon.green{background:#f0fdf4;color:#16a34a}
+.feat-icon.amber{background:#fffbeb;color:#d97706}
+.feat-icon.purple{background:#faf5ff;color:#9333ea}
+.feat-icon.teal{background:#f0fdfa;color:#0d9488}
+.feat-icon.coral{background:#fff7ed;color:#ea580c}
+.feat-text{font-size:12px;line-height:1.6}
+.feat-text strong{font-size:13px;display:block;color:#111}
+.feat-text span{color:#666}
+.howto{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin-bottom:20px}
+.howto-title{font-size:14px;font-weight:700;color:#111;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.howto-title i{color:#2563eb}
+.howto-steps{display:flex;gap:12px;align-items:center;justify-content:center}
+.howto-step{display:flex;align-items:center;gap:8px}
+.howto-num{width:26px;height:26px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.howto-label{font-size:13px;color:#333}
+.howto-arrow{color:#cbd5e1;font-size:18px}
+.bookmark-tip{background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.bookmark-tip i{font-size:22px;color:#2563eb;flex-shrink:0}
+.bookmark-tip-text{font-size:12px;color:#333;line-height:1.6}
+.bookmark-tip-text strong{color:#1e40af}
+.feedback{background:#fefce8;border:1.5px solid #fde68a;border-radius:10px;padding:14px 18px;text-align:center}
+.feedback-title{font-size:15px;font-weight:700;color:#92400e;margin-bottom:4px}
+.feedback-text{font-size:13px;color:#78350f;line-height:1.7}
+.feedback-text strong{font-weight:700}
+.footer{margin-top:20px;text-align:center;font-size:11px;color:#999;border-top:1px solid #e5e7eb;padding-top:12px}
+.footer strong{color:#666}
+.no-print{margin-top:20px;text-align:center}
+.print-btn{padding:12px 40px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+.print-btn:hover{background:#1d4ed8}
+@media print{
+  .no-print{display:none}
+  body{padding:0}
+  .page{padding:15mm}
+  @page{size:A4 portrait;margin:0}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top-label-wrap"><div class="top-label">乗務員向け 便利ツール</div></div>
+  <div class="title-block">
+    <h1><span>交通＆渋滞</span>ナビ</h1>
+    <div class="sub">スマホでいつでも &#8212; リアルタイム交通情報リンク集</div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="main-row">
+    <div class="qr-col">
+      <div class="scan-label"><i class="ti ti-scan"></i> QR&#12434;&#35501;&#12415;&#21462;&#12426;</div>
+      <div id="qr"></div>
+      <div class="qr-url">https://morningcape-ops.github.io/traffic-navi/</div>
+    </div>
+    <div class="features-col">
+      <div class="features-title"><i class="ti ti-sparkles"></i> こんなことができます</div>
+      <div class="feat-grid">
+        <div class="feat">
+          <div class="feat-icon blue"><i class="ti ti-map-2"></i></div>
+          <div class="feat-text"><strong>渋滞チェック</strong><span>Google Maps・JARTIC・首都高リアルタイムマップで渋滞を確認</span></div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon green"><i class="ti ti-train"></i></div>
+          <div class="feat-text"><strong>鉄道運行情報</strong><span>JR・東急・京急の遅延/運休を把握 → 駅前需要を先読み</span></div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon amber"><i class="ti ti-cloud-rain"></i></div>
+          <div class="feat-text"><strong>天気・雨雲レーダー</strong><span>川崎市の天気予報と15分単位の雨雲レーダー</span></div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon purple"><i class="ti ti-gas-station"></i></div>
+          <div class="feat-text"><strong>LPGスタンド一覧</strong><span>営業所指定10ヶ所の住所・電話・営業時間をワンタップ</span></div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon coral"><i class="ti ti-calendar-event"></i></div>
+          <div class="feat-text"><strong>イベント情報</strong><span>川崎市内の今日のイベント → 周辺渋滞・需要変動を予測</span></div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon teal"><i class="ti ti-map-pin"></i></div>
+          <div class="feat-text"><strong>エリアマップ</strong><span>営業エリア周辺のGoogleマップを埋め込み表示</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="howto">
+    <div class="howto-title"><i class="ti ti-device-mobile"></i> 使い方はかんたん</div>
+    <div class="howto-steps">
+      <div class="howto-step"><div class="howto-num">1</div><div class="howto-label">QRをスキャン</div></div>
+      <div class="howto-arrow"><i class="ti ti-chevron-right"></i></div>
+      <div class="howto-step"><div class="howto-num">2</div><div class="howto-label">ページが開く</div></div>
+      <div class="howto-arrow"><i class="ti ti-chevron-right"></i></div>
+      <div class="howto-step"><div class="howto-num">3</div><div class="howto-label">見たいリンクをタップ</div></div>
+    </div>
+  </div>
+
+  <div class="bookmark-tip">
+    <i class="ti ti-bookmark-plus"></i>
+    <div class="bookmark-tip-text">
+      <strong>ホーム画面に追加がおすすめ！</strong><br>
+      iPhone → 共有ボタン(↑) →「ホーム画面に追加」／ Android → メニュー(⋮) →「ホーム画面に追加」<br>
+      アプリのようにワンタップで開けるようになります。
+    </div>
+  </div>
+
+  <div class="feedback">
+    <div class="feedback-title">&#128221; ご意見・不具合をお聞かせください</div>
+    <div class="feedback-text">
+      現在<strong>プロトタイプ（試作版）</strong>として公開しています。<br>
+      「リンクが開けない」「こんな情報も欲しい」など、<br>
+      気づいたことがあれば<strong>事務所の木下</strong>まで気軽にお知らせください。<br>
+      皆さんの声をもとに改善していきます！
+    </div>
+  </div>
+
+  <div class="footer">
+    <strong>（株）八重洲タクシー 川崎営業所</strong> &#8212; ログイン不要・無料・データ通信のみで利用可
+  </div>
+
+  <div class="no-print">
+    <button class="print-btn" onclick="window.print()"><i class="ti ti-printer"></i> 印刷する</button>
+  </div>
+</div>
+
+<script>
+new QRCode(document.getElementById('qr'), {
+  text: 'https://morningcape-ops.github.io/traffic-navi/',
+  width: 180,
+  height: 180,
+  colorDark: '#000000',
+  colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.H
+});
+</script>
+</body>
+</html>
