@@ -59,6 +59,17 @@ body{font-family:'Noto Sans JP',sans-serif;background:#fff;color:#1a1a1a;display
 .no-print{margin-top:20px;text-align:center}
 .print-btn{padding:12px 40px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
 .print-btn:hover{background:#1d4ed8}
+.contacts{margin-bottom:20px}
+.contacts-title{font-size:14px;font-weight:700;color:#111;margin-bottom:10px;display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:2px solid #e5e7eb}
+.contacts-title i{color:#dc2626}
+.contacts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.contact-item{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px}
+.contact-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.contact-icon.police{background:#fef2f2;color:#dc2626}
+.contact-icon.service{background:#eff6ff;color:#2563eb}
+.contact-info{font-size:12px;line-height:1.4}
+.contact-info strong{font-size:13px;color:#111;display:block}
+.contact-info .tel{color:#2563eb;font-weight:600;font-variant-numeric:tabular-nums}
 @media print{
   .no-print{display:none}
   body{padding:0}
@@ -133,6 +144,27 @@ body{font-family:'Noto Sans JP',sans-serif;background:#fff;color:#1a1a1a;display
     </div>
   </div>
 
+  <div class="contacts">
+    <div class="contacts-title"><i class="ti ti-phone-call"></i> 緊急・よく使う連絡先</div>
+    <div class="contacts-grid">
+      <div class="contact-item">
+        <div class="contact-icon police"><i class="ti ti-shield"></i></div>
+        <div class="contact-info"><strong>中原警察署</strong><span class="tel">044-722-0110</span></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon police"><i class="ti ti-shield"></i></div>
+        <div class="contact-info"><strong>高津警察署</strong><span class="tel">044-822-0110</span></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon police"><i class="ti ti-shield"></i></div>
+        <div class="contact-info"><strong>幸警察署</strong><span class="tel">044-548-0110</span></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon service"><i class="ti ti-tool"></i></div>
+        <div class="contact-info"><strong>横浜矢崎サービス</strong><span class="tel">045-531-2900</span><span style="font-size:10px;color:#888">新羽町 平日8:30-17:15</span></div>
+      </div>
+    </div>
+  </div>
   <div class="feedback">
     <div class="feedback-title">&#128221; ご意見・不具合をお聞かせください</div>
     <div class="feedback-text">

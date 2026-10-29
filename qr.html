@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>交通ナビ QRコード</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: #fff; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+h1 { font-size: 24px; margin-bottom: 8px; }
+.sub { color: #666; margin-bottom: 32px; font-size: 14px; }
+#qr { margin-bottom: 24px; }
+.url { font-size: 12px; color: #999; word-break: break-all; max-width: 400px; text-align: center; margin-bottom: 24px; }
+.note { background: #f5f5f5; border-radius: 8px; padding: 16px 24px; max-width: 500px; font-size: 13px; color: #555; line-height: 1.8; }
+.note strong { color: #333; }
+.print-btn { margin-top: 24px; padding: 12px 32px; background: #4a90d9; color: #fff; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; }
+.print-btn:hover { background: #3a7dc0; }
+@media print {
+  .print-btn, .note { display: none; }
+  body { padding: 60px 20px; }
+}
+</style>
+</head>
+<body>
+<h1>🚦 交通＆渋滞ナビ</h1>
+<p class="sub">（株）八重洲タクシー川崎営業所</p>
+<div id="qr"></div>
+<p class="url">https://morningcape-ops.github.io/traffic-navi/</p>
+<div class="note">
+  <strong>配布方法:</strong><br>
+  ① このページを印刷してQRコードを掲示<br>
+  ② 運転者がスマホカメラでスキャン<br>
+  ③ 交通ナビが開きます（ブックマーク推奨）<br><br>
+  <strong>注意:</strong> 誰でもアクセスできる公開URLです。ブックマークに追加すると便利です。
+</div>
+<button class="print-btn" onclick="window.print()">印刷する</button>
+<script>
+new QRCode(document.getElementById('qr'), {
+  text: 'https://morningcape-ops.github.io/traffic-navi/',
+  width: 256,
+  height: 256,
+  colorDark: '#000000',
+  colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.H
+});
+</script>
+</body>
+</html>
