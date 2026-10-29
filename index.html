@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="交通ナビ">
+<meta name="format-detection" content="telephone=no">
+<title>交通＆渋滞ナビ | 川崎営業所</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/tabler-icons.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0a0a0a;--surface:#151515;--card:#1a1a1a;--card-hover:#1e2230;
+  --border:#222;--border-hover:#2a3a4a;
+  --text:#eee;--text-sub:#888;--text-muted:#556;
+  --blue:#4a90d9;--blue-light:#6ab0f3;--blue-bg:#122a44;
+  --green:#6ec97a;--green-bg:#0e2a14;
+  --amber:#e8b84a;--amber-bg:#2a2010;
+  --coral:#f0997b;--coral-bg:#2a1510;
+  --teal:#5dcaa5;--teal-bg:#0a2a22;
+  --purple:#a98ed6;--purple-bg:#221a38;
+  --red:#e85d5d;--red-bg:#2a1010;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-left:env(safe-area-inset-left,0px);
+  --safe-right:env(safe-area-inset-right,0px);
+}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;
+  min-height:100vh;min-height:100dvh;
+  padding:var(--safe-top) max(16px,var(--safe-right)) calc(32px + var(--safe-bottom)) max(16px,var(--safe-left));
+  -webkit-font-smoothing:antialiased;
+}
+.header{padding:20px 0 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.header-icon{width:44px;height:44px;border-radius:12px;background:var(--blue-bg);color:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.header h1{font-size:22px;font-weight:700;color:var(--text);line-height:1.3}
+.header .sub{font-size:13px;color:var(--text-sub);margin-top:2px}
+.timestamp{margin-left:auto;font-size:12px;color:var(--text-muted);text-align:right;line-height:1.6;flex-shrink:0}
+.timestamp .time{font-size:16px;color:var(--text-sub);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* Sections */
+.section{margin-bottom:24px}
+.section-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.section-bar{width:4px;height:22px;border-radius:2px}
+.section-bar.blue{background:var(--blue)}
+.section-bar.green{background:var(--green)}
+.section-bar.amber{background:var(--amber)}
+.section-bar.coral{background:var(--coral)}
+.section-bar.teal{background:var(--teal)}
+.section-title{font-size:15px;font-weight:600;color:#ccc}
+
+/* Link Cards */
+.link-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.link-card{
+  background:var(--card);border-radius:14px;padding:16px 20px;
+  display:flex;align-items:center;gap:14px;
+  border:1.5px solid transparent;transition:all .2s;
+  cursor:pointer;text-decoration:none;position:relative;overflow:hidden;
+  -webkit-user-select:none;user-select:none;
+}
+.link-card:hover{border-color:var(--border-hover);background:var(--card-hover);transform:translateY(-2px)}
+.link-card:active{transform:scale(0.98);background:var(--card-hover)}
+.link-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .3s}
+.link-card:hover::after,.link-card:active::after{opacity:1}
+.link-card.blue-line::after{background:linear-gradient(90deg,var(--blue),var(--blue-light))}
+.link-card.green-line::after{background:linear-gradient(90deg,var(--green),#8fdf9a)}
+.link-card.amber-line::after{background:linear-gradient(90deg,var(--amber),#f0d060)}
+.link-card.coral-line::after{background:linear-gradient(90deg,var(--coral),#f5b8a0)}
+.link-card.teal-line::after{background:linear-gradient(90deg,var(--teal),#80ddb8)}
+.link-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.link-info{flex:1;min-width:0}
+.link-name{font-size:15px;font-weight:600;color:var(--text)}
+.link-desc{font-size:12px;color:var(--text-sub);margin-top:2px;line-height:1.5}
+.link-arrow{color:var(--text-muted);font-size:16px;flex-shrink:0;transition:transform .2s}
+.link-card:hover .link-arrow{transform:translateX(3px);color:var(--text-sub)}
+.link-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;margin-top:4px}
+.link-tag.recommended{background:rgba(74,144,217,.15);color:var(--blue-light)}
+.link-tag.expressway{background:rgba(232,184,74,.12);color:var(--amber)}
+.link-tag.rail{background:rgba(110,201,122,.12);color:var(--green)}
+
+/* Rail Status */
+.rail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.rail-item{background:var(--card);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px;border:1px solid var(--border)}
+.rail-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.rail-dot.normal{background:var(--green)}
+.rail-dot.delay{background:var(--amber)}
+.rail-dot.suspend{background:var(--red)}
+.rail-name{font-size:14px;color:var(--text);font-weight:500}
+.rail-status{font-size:12px;margin-left:auto;font-weight:500}
+.rail-status.normal{color:var(--green)}
+.rail-status.delay{color:var(--amber)}
+.rail-status.suspend{color:var(--red)}
+
+/* Quick map */
+.map-frame{width:100%;height:300px;border-radius:14px;border:1px solid var(--border);overflow:hidden}
+.map-frame iframe{width:100%;height:100%;border:none}
+
+/* Note */
+.note{background:var(--surface);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:var(--text-sub);line-height:1.7;margin-top:16px}
+.note strong{color:var(--text);font-weight:600}
+
+/* Stand table */
+.stand-wrap{margin-top:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--border)}
+.stand-table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+.stand-table th,.stand-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:middle}
+.stand-table th{background:var(--surface);color:var(--text-sub);font-weight:600;font-size:11px;white-space:nowrap;position:sticky;top:0}
+.stand-table tr:last-child td{border-bottom:none}
+.stand-table tr:hover td{background:var(--card-hover)}
+.stand-table .name{font-weight:600;color:var(--text);white-space:nowrap}
+.stand-table .tel a{color:var(--blue-light);text-decoration:none;font-weight:600;font-variant-numeric:tabular-nums}
+.stand-table .tel a:hover{text-decoration:underline}
+.stand-table .hours{color:var(--text-sub);font-size:12px;white-space:nowrap}
+.stand-table .hours .day{color:var(--amber);font-size:11px}
+.stand-caption{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5}
+
+/* Responsive — tablet */
+@media(max-width:768px){
+  .link-grid{grid-template-columns:1fr}
+  .rail-grid{grid-template-columns:1fr 1fr}
+}
+
+/* Responsive — smartphone */
+@media(max-width:600px){
+  body{padding:var(--safe-top) max(12px,var(--safe-right)) calc(24px + var(--safe-bottom)) max(12px,var(--safe-left))}
+  .header{flex-wrap:wrap;gap:10px;padding:16px 0 14px;margin-bottom:16px}
+  .header-icon{width:40px;height:40px;font-size:20px}
+  .header h1{font-size:17px}
+  .header .sub{font-size:12px}
+  .timestamp{width:100%;text-align:left;margin-left:52px;margin-top:-4px}
+  .timestamp .time{font-size:15px}
+  .section{margin-bottom:20px}
+  .section-title{font-size:14px}
+  .link-grid{gap:10px}
+  .link-card{padding:14px 16px;gap:12px;border-radius:12px;min-height:64px}
+  .link-icon{width:40px;height:40px;font-size:18px;border-radius:10px}
+  .link-name{font-size:14px}
+  .link-desc{font-size:11px}
+  .map-frame{height:220px;border-radius:12px}
+  .note{padding:12px 14px;font-size:12px}
+  .stand-table{font-size:12px;min-width:560px}
+  .stand-table th,.stand-table td{padding:8px 10px}
+}
+
+/* Very small phones */
+@media(max-width:360px){
+  .header h1{font-size:15px}
+  .link-name{font-size:13px}
+  .timestamp{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-icon"><i class="ti ti-road"></i></div>
+  <div>
+    <h1>交通＆渋滞ナビ  Modify by  kinoshita</h1>
+    <div class="sub">川崎営業所 — リアルタイム交通情報リンク集</div>
+  </div>
+  <div class="timestamp">
+    <div class="time" id="clock">--:--</div>
+    <div id="date-str">----</div>
+  </div>
+</div>
+
+<!-- ===== 渋滞・道路情報 ===== -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-bar blue"></div>
+    <div class="section-title">渋滞・道路情報</div>
+  </div>
+  <div class="link-grid">
+
+    <a class="link-card blue-line" href="https://www.google.com/maps/@35.5704,139.6553,13z/data=!5m1!1e1" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--blue-bg);color:var(--blue-light)"><i class="ti ti-map-2"></i></div>
+      <div class="link-info">
+        <div class="link-name">Google Maps 渋滞レイヤー</div>
+        <div class="link-desc">川崎市中原区周辺のリアルタイム渋滞表示</div>
+        <span class="link-tag recommended">おすすめ</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card blue-line" href="https://www.jartic.or.jp/" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--teal-bg);color:var(--teal)"><i class="ti ti-highway"></i></div>
+      <div class="link-info">
+        <div class="link-name">JARTIC 道路交通情報</div>
+        <div class="link-desc">日本道路交通情報センター — 全国の規制・渋滞</div>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card amber-line" href="https://search.shutoko-eng.jp/rtmap.html" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--amber-bg);color:var(--amber)"><i class="ti ti-road-sign"></i></div>
+      <div class="link-info">
+        <div class="link-name">首都高リアルタイム（mew-ti）</div>
+        <div class="link-desc">首都高速道路のリアルタイム渋滞・規制マップ</div>
+        <span class="link-tag expressway">高速道路</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card blue-line" href="https://www.drivetraffic.jp/" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--purple-bg);color:var(--purple)"><i class="ti ti-steering-wheel"></i></div>
+      <div class="link-info">
+        <div class="link-name">ドラとら</div>
+        <div class="link-desc">NEXCO東日本 — 高速道路料金・ルート検索</div>
+        <span class="link-tag expressway">高速道路</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card teal-line" href="https://www.city.kawasaki.jp/kurashi/category/28-0-0-0-0-0-0-0-0-0.html" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--green-bg);color:var(--green)"><i class="ti ti-building-community"></i></div>
+      <div class="link-info">
+        <div class="link-name">川崎市 道路情報</div>
+        <div class="link-desc">川崎市の道路工事・通行規制・維持管理情報</div>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card green-line" href="https://www.c-ihighway.jp/pcsite/" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--coral-bg);color:var(--coral)"><i class="ti ti-video"></i></div>
+      <div class="link-info">
+        <div class="link-name">iHighway 交通情報</div>
+        <div class="link-desc">NEXCO中日本 — 高速道路ライブカメラ・規制情報</div>
+        <span class="link-tag expressway">高速道路</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+  </div>
+</div>
+
+<!-- ===== 鉄道運行情報 ===== -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-bar green"></div>
+    <div class="section-title">鉄道運行情報（踏切・乗客動線に影響）</div>
+  </div>
+
+  <div class="link-grid" style="margin-bottom:12px">
+    <a class="link-card green-line" href="https://transit.yahoo.co.jp/diainfo/area/4" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--green-bg);color:var(--green)"><i class="ti ti-train"></i></div>
+      <div class="link-info">
+        <div class="link-name">Yahoo! 運行情報（関東）</div>
+        <div class="link-desc">遅延・運休をリアルタイム表示</div>
+        <span class="link-tag rail">リアルタイム</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card green-line" href="https://traininfo.jreast.co.jp/train_info/kanto.aspx" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--green-bg);color:var(--green)"><i class="ti ti-train"></i></div>
+      <div class="link-info">
+        <div class="link-name">JR東日本 運行情報</div>
+        <div class="link-desc">南武線・横須賀線・東海道線 etc.</div>
+        <span class="link-tag rail">JR</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card green-line" href="https://traininfo.tokyu.co.jp/sp/" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--teal-bg);color:var(--teal)"><i class="ti ti-train"></i></div>
+      <div class="link-info">
+        <div class="link-name">東急電鉄 運行情報</div>
+        <div class="link-desc">東横線・目黒線・田園都市線 etc.</div>
+        <span class="link-tag rail">東急</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card green-line" href="https://unkou.keikyu.co.jp/index.html" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--red-bg);color:var(--red)"><i class="ti ti-train"></i></div>
+      <div class="link-info">
+        <div class="link-name">京急電鉄 運行情報</div>
+        <div class="link-desc">京急本線・大師線</div>
+        <span class="link-tag rail">京急</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+  </div>
+</div>
+
+<!-- ===== 天気・イベント ===== -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-bar amber"></div>
+    <div class="section-title">天気・需要予測</div>
+  </div>
+  <div class="link-grid">
+
+    <a class="link-card amber-line" href="https://tenki.jp/forecast/3/17/4610/14133/" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--amber-bg);color:var(--amber)"><i class="ti ti-cloud-rain"></i></div>
+      <div class="link-info">
+        <div class="link-name">tenki.jp 川崎市中原区</div>
+        <div class="link-desc">天気予報 — 雨ならタクシー需要UP</div>
+        <span class="link-tag recommended">おすすめ</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card amber-line" href="https://tenki.jp/radar/3/17/" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--amber-bg);color:var(--amber)"><i class="ti ti-radar"></i></div>
+      <div class="link-info">
+        <div class="link-name">雨雲レーダー（神奈川）</div>
+        <div class="link-desc">直近の降雨を15分単位で表示</div>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+    <a class="link-card coral-line" href="https://www.google.com/search?q=%E5%B7%9D%E5%B4%8E%E5%B8%82+%E4%BB%8A%E6%97%A5+%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--coral-bg);color:var(--coral)"><i class="ti ti-calendar-event"></i></div>
+      <div class="link-info">
+        <div class="link-name">川崎市 今日のイベント</div>
+        <div class="link-desc">イベント開催日 = 周辺渋滞・需要変動</div>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+
+  </div>
+</div>
+
+<!-- ===== LPGスタンド ===== -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-bar purple" style="background:var(--purple)"></div>
+    <div class="section-title">燃料・LPGスタンド</div>
+  </div>
+  <div class="link-grid">
+    <a class="link-card teal-line" href="https://www.google.com/maps/search/オートガススタンド/@35.68,139.77,10z" target="_blank" rel="noopener">
+      <div class="link-icon" style="background:var(--purple-bg);color:var(--purple)"><i class="ti ti-gas-station"></i></div>
+      <div class="link-info">
+        <div class="link-name">広域 オートガススタンド検索</div>
+        <div class="link-desc">Google Maps — 東京・神奈川・千葉・埼玉など関東を地図検索</div>
+        <span class="link-tag recommended">広域検索</span>
+      </div>
+      <i class="ti ti-chevron-right link-arrow"></i>
+    </a>
+  </div>
+
+  <div class="section-head" style="margin-top:20px">
+    <div class="section-bar purple" style="background:var(--purple)"></div>
+    <div class="section-title">営業所デフォルト給油所</div>
+  </div>
+  <div class="stand-wrap">
+    <table class="stand-table">
+      <thead>
+        <tr>
+          <th>通称</th>
+          <th>スタンド・会社</th>
+          <th>住所</th>
+          <th>電話</th>
+          <th>営業時間</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">久地</td>
+          <td>川崎LPステーション<br><span style="color:var(--text-muted);font-size:11px">(株)アクトクリーンステーション</span></td>
+          <td>高津区久地2-5-12</td>
+          <td class="tel"><a href="tel:044-811-6626">044-811-6626</a></td>
+          <td class="hours">平日 14:00〜22:00<br><span class="day">日祝 16:00〜21:00</span></td>
+        </tr>
+        <tr>
+          <td class="name">小倉</td>
+          <td>LPガススタンド<br><span style="color:var(--text-muted);font-size:11px">京浜企業(株)</span></td>
+          <td>幸区小倉5-25-20</td>
+          <td class="tel"><a href="tel:044-588-3028">044-588-3028</a></td>
+          <td class="hours">平日 8:00〜20:00<br><span class="day">日祝 8:00〜18:00</span></td>
+        </tr>
+        <tr>
+          <td class="name">都筑</td>
+          <td>(株)クラスタ</td>
+          <td>都筑区東方町1698</td>
+          <td class="tel"><a href="tel:045-942-1131">045-942-1131</a></td>
+          <td class="hours">平日 7:00〜20:30<br><span class="day">日祝 7:00〜20:00</span></td>
+        </tr>
+        <tr>
+          <td class="name">羽田</td>
+          <td>盈進商事(株)</td>
+          <td>大田区東糀谷3-16-10</td>
+          <td class="tel"><a href="tel:03-3744-8131">03-3744-8131</a></td>
+          <td class="hours">15:00〜翌10:00</td>
+        </tr>
+        <tr>
+          <td class="name">五反田</td>
+          <td>五反田店<br><span style="color:var(--text-muted);font-size:11px">富士エネルギー(株)</span></td>
+          <td>品川区大崎5-1-2</td>
+          <td class="tel"><a href="tel:03-3492-7637">03-3492-7637</a></td>
+          <td class="hours">24時間</td>
+        </tr>
+        <tr>
+          <td class="name">目黒</td>
+          <td>目黒店<br><span style="color:var(--text-muted);font-size:11px">富士エネルギー(株)</span></td>
+          <td>目黒区目黒1-24-2</td>
+          <td class="tel"><a href="tel:03-3492-6676">03-3492-6676</a></td>
+          <td class="hours">11:00〜翌6:00</td>
+        </tr>
+        <tr>
+          <td class="name">中野(新宿)</td>
+          <td>中野店<br><span style="color:var(--text-muted);font-size:11px">富士エネルギー(株)</span></td>
+          <td>中野区弥生町1-5-12</td>
+          <td class="tel"><a href="tel:03-3372-0221">03-3372-0221</a></td>
+          <td class="hours">24時間</td>
+        </tr>
+        <tr>
+          <td class="name">三鷹</td>
+          <td>三鷹LPGスタンド<br><span style="color:var(--text-muted);font-size:11px">エネックス(株)</span></td>
+          <td>三鷹市新川6-33-5</td>
+          <td class="tel"><a href="tel:0422-45-3254">0422-45-3254</a></td>
+          <td class="hours">2:00〜22:00</td>
+        </tr>
+        <tr>
+          <td class="name">桜ヶ丘</td>
+          <td>桜ヶ丘LPGスタンド<br><span style="color:var(--text-muted);font-size:11px">エネックス(株)</span></td>
+          <td>多摩市和田61-1</td>
+          <td class="tel"><a href="tel:042-375-7451">042-375-7451</a></td>
+          <td class="hours">8:00〜22:00</td>
+        </tr>
+        <tr>
+          <td class="name">八王子</td>
+          <td>八王子LPGスタンド<br><span style="color:var(--text-muted);font-size:11px">エネックス(株)</span></td>
+          <td>八王子市北野町598-1</td>
+          <td class="tel"><a href="tel:042-646-0751">042-646-0751</a></td>
+          <td class="hours">8:00〜22:00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="stand-caption">※ 2024年2月7日時点の情報。営業時間は変更されることがあります。給油前に電話確認を推奨。</p>
+</div>
+
+<!-- ===== 地図 ===== -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-bar teal"></div>
+    <div class="section-title">営業エリアマップ</div>
+  </div>
+  <div class="map-frame">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d26000!2d139.6553!3d35.5704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sjp" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  <div class="note">
+    <strong>使い方:</strong> 各カードは新しいタブで開きます。用が済んだらタブを閉じてポータルに戻れます。Google Maps 渋滞レイヤーが最も正確です。出庫前に1回チェックし、渋滞エリアを避けたルートを配車に反映してください。首都高は「mew-ti」マップでリアルタイム規制を確認。鉄道遅延時は駅前のタクシー需要が急増します。
+  </div>
+</div>
+
+<script>
+function updateClock(){
+  const now=new Date();
+  const days=['日','月','火','水','木','金','土'];
+  document.getElementById('clock').textContent=
+    now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('date-str').textContent=
+    now.getFullYear()+'/'+(now.getMonth()+1)+'/'+now.getDate()+'('+days[now.getDay()]+')';
+}
+updateClock();
+setInterval(updateClock,30000);
+</script>
+
+</body>
+</html>
