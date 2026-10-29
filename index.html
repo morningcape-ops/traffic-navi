@@ -186,6 +186,14 @@ body{
   .link-name{font-size:13px}
   .timestamp{margin-left:0}
 }
+.drive-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:9999;justify-content:center;align-items:center;flex-direction:column;gap:16px;text-align:center;padding:32px}
+.drive-overlay.active{display:flex}
+.drive-overlay .drive-icon{font-size:64px;color:var(--red)}
+.drive-overlay .drive-msg{font-size:20px;font-weight:700;color:#fff;line-height:1.6}
+.drive-overlay .drive-sub{font-size:14px;color:var(--text-sub);line-height:1.6}
+.drive-overlay .drive-speed{font-size:13px;color:var(--text-muted);margin-top:8px;font-variant-numeric:tabular-nums}
+.drive-overlay .drive-tel{margin-top:20px;display:flex;flex-direction:column;gap:8px}
+.drive-overlay .drive-tel a{color:var(--blue-light);font-size:16px;font-weight:600;text-decoration:none;padding:10px 24px;border:1px solid var(--border);border-radius:10px;background:var(--card)}
 </style>
 </head>
 <body>
@@ -601,5 +609,49 @@ function dismissBanner(){
 })();
 </script>
 
+<div class="drive-overlay" id="driveOverlay">
+  <div class="drive-icon"><i class="ti ti-steering-wheel"></i></div>
+  <div class="drive-msg">走行中は使用できません</div>
+  <div class="drive-sub">安全な場所に停車してからご利用ください</div>
+  <div class="drive-speed" id="driveSpeed"></div>
+  <div class="drive-tel">
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">緊急時は電話のみ可能</div>
+    <a href="tel:110"><i class="ti ti-shield"></i> 110 警察</a>
+    <a href="tel:119"><i class="ti ti-ambulance"></i> 119 消防・救急</a>
+  </div>
+</div>
+<script>
+(function(){
+  var SPEED_LIMIT = 4;
+  var overlay = document.getElementById('driveOverlay');
+  var speedEl = document.getElementById('driveSpeed');
+  var blocked = false;
+  var watchId = null;
+  
+  if (!navigator.geolocation) return;
+  
+  try {
+    watchId = navigator.geolocation.watchPosition(function(pos){
+      var spd = pos.coords.speed;
+      if(spd === null || spd === undefined) return;
+      var kmh = Math.round(spd * 3.6);
+      
+      if(kmh >= SPEED_LIMIT && !blocked){
+        blocked = true;
+        overlay.classList.add('active');
+        speedEl.textContent = '検出速度: 約'+kmh+'km/h';
+      } else if(kmh < SPEED_LIMIT && blocked){
+        blocked = false;
+        overlay.classList.remove('active');
+      }
+      if(blocked){
+        speedEl.textContent = '検出速度: 約'+kmh+'km/h';
+      }
+    }, function(err){
+      // permission denied or unavailable - do nothing, app works normally
+    }, {enableHighAccuracy:true, maximumAge:3000, timeout:10000});
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
