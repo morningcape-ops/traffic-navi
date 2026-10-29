@@ -118,6 +118,19 @@ body{
 .stand-table .hours .day{color:var(--amber);font-size:11px}
 .stand-caption{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5}
 
+
+/* Emergency contacts */
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.contact-card{background:var(--card);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;border:1px solid var(--border)}
+.contact-card .c-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.contact-card .c-icon.police{background:var(--red-bg);color:var(--red)}
+.contact-card .c-icon.service{background:var(--blue-bg);color:var(--blue-light)}
+.contact-card .c-info{flex:1;min-width:0}
+.contact-card .c-name{font-size:14px;font-weight:600;color:var(--text)}
+.contact-card .c-tel{font-size:15px;font-weight:700;color:var(--blue-light);text-decoration:none;font-variant-numeric:tabular-nums}
+.contact-card .c-tel:hover{text-decoration:underline}
+.contact-card .c-note{font-size:11px;color:var(--text-muted);margin-top:2px}
+
 /* Bookmark banner */
 .bm-banner{background:var(--blue-bg);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px;cursor:pointer;transition:all .2s}
 .bm-banner:hover{border-color:var(--border-hover);background:var(--card-hover)}
@@ -485,6 +498,45 @@ body{
   <p class="stand-caption">※ 2024年2月7日時点の情報。営業時間は変更されることがあります。給油前に電話確認を推奨。</p>
 </div>
 
+
+<!-- ===== 緊急連絡先 ===== -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-bar" style="background:var(--red)"></div>
+    <div class="section-title">緊急・よく使う連絡先</div>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-card">
+      <div class="c-icon police"><i class="ti ti-shield"></i></div>
+      <div class="c-info">
+        <div class="c-name">中原警察署</div>
+        <a class="c-tel" href="tel:044-722-0110">044-722-0110</a>
+      </div>
+    </div>
+    <div class="contact-card">
+      <div class="c-icon police"><i class="ti ti-shield"></i></div>
+      <div class="c-info">
+        <div class="c-name">高津警察署</div>
+        <a class="c-tel" href="tel:044-822-0110">044-822-0110</a>
+      </div>
+    </div>
+    <div class="contact-card">
+      <div class="c-icon police"><i class="ti ti-shield"></i></div>
+      <div class="c-info">
+        <div class="c-name">幸警察署</div>
+        <a class="c-tel" href="tel:044-548-0110">044-548-0110</a>
+      </div>
+    </div>
+    <div class="contact-card">
+      <div class="c-icon service"><i class="ti ti-tool"></i></div>
+      <div class="c-info">
+        <div class="c-name">横浜矢崎サービス</div>
+        <a class="c-tel" href="tel:045-531-2900">045-531-2900</a>
+        <div class="c-note">新羽町 平日8:30-17:15</div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- ===== 地図 ===== -->
 <div class="section">
   <div class="section-head">
