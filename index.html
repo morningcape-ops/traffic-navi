@@ -118,6 +118,27 @@ body{
 .stand-table .hours .day{color:var(--amber);font-size:11px}
 .stand-caption{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5}
 
+/* Bookmark banner */
+.bm-banner{background:var(--blue-bg);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px;cursor:pointer;transition:all .2s}
+.bm-banner:hover{border-color:var(--border-hover);background:var(--card-hover)}
+.bm-banner-icon{width:36px;height:36px;border-radius:10px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.bm-banner-text{flex:1;font-size:13px;color:var(--text-sub);line-height:1.5}
+.bm-banner-text strong{color:var(--text);font-size:14px;display:block;margin-bottom:2px}
+.bm-close{background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;padding:4px;flex-shrink:0}
+.bm-close:hover{color:var(--text)}
+.bm-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.bm-modal-overlay.active{display:flex}
+.bm-modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:400px;width:100%}
+.bm-modal h2{font-size:18px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.bm-modal h2 i{color:var(--blue-light)}
+.bm-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.bm-step-num{width:28px;height:28px;border-radius:50%;background:var(--blue-bg);color:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.bm-step-text{font-size:14px;color:var(--text-sub);line-height:1.6;padding-top:3px}
+.bm-step-text strong{color:var(--text)}
+.bm-platform{margin-bottom:20px}
+.bm-platform-title{font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.bm-modal-close{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px}
+.bm-modal-close:hover{opacity:.9}
 /* Responsive — tablet */
 @media(max-width:768px){
   .link-grid{grid-template-columns:1fr}
@@ -168,6 +189,34 @@ body{
   </div>
 </div>
 
+
+<div class="bm-banner" id="bmBanner" onclick="document.getElementById('bmModal').classList.add('active')">
+  <div class="bm-banner-icon"><i class="ti ti-bookmark-plus"></i></div>
+  <div class="bm-banner-text">
+    <strong>ホーム画面に追加</strong>
+    ブックマークしておくと次回すぐ開けます
+  </div>
+  <button class="bm-close" onclick="event.stopPropagation();dismissBanner()" title="閉じる">&times;</button>
+</div>
+
+<div class="bm-modal-overlay" id="bmModal" onclick="if(event.target===this)this.classList.remove('active')">
+  <div class="bm-modal">
+    <h2><i class="ti ti-device-mobile"></i>ホーム画面に追加する方法</h2>
+    <div class="bm-platform">
+      <div class="bm-platform-title">iPhone / iPad（Safari）</div>
+      <div class="bm-step"><div class="bm-step-num">1</div><div class="bm-step-text">画面下の <strong>共有ボタン（↑）</strong>をタップ</div></div>
+      <div class="bm-step"><div class="bm-step-num">2</div><div class="bm-step-text"><strong>「ホーム画面に追加」</strong>を選択</div></div>
+      <div class="bm-step"><div class="bm-step-num">3</div><div class="bm-step-text"><strong>「追加」</strong>をタップで完了！</div></div>
+    </div>
+    <div class="bm-platform">
+      <div class="bm-platform-title">Android（Chrome）</div>
+      <div class="bm-step"><div class="bm-step-num">1</div><div class="bm-step-text">右上の <strong>メニュー（⋮）</strong>をタップ</div></div>
+      <div class="bm-step"><div class="bm-step-num">2</div><div class="bm-step-text"><strong>「ホーム画面に追加」</strong>を選択</div></div>
+      <div class="bm-step"><div class="bm-step-num">3</div><div class="bm-step-text"><strong>「追加」</strong>をタップで完了！</div></div>
+    </div>
+    <button class="bm-modal-close" onclick="document.getElementById('bmModal').classList.remove('active')">閉じる</button>
+  </div>
+</div>
 <!-- ===== 渋滞・道路情報 ===== -->
 <div class="section">
   <div class="section-head">
@@ -461,6 +510,15 @@ function updateClock(){
 }
 updateClock();
 setInterval(updateClock,30000);
+
+function dismissBanner(){
+  document.getElementById('bmBanner').style.display='none';
+  try{localStorage.setItem('bm-dismissed','1')}catch(e){}
+}
+(function(){
+  try{if(localStorage.getItem('bm-dismissed')==='1'){document.getElementById('bmBanner').style.display='none'}}catch(e){}
+  if(window.matchMedia('(display-mode: standalone)').matches){document.getElementById('bmBanner').style.display='none'}
+})();
 </script>
 
 </body>
