@@ -8,6 +8,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="交通ナビ">
 <meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
 <title>交通＆渋滞ナビ | 川崎営業所</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/tabler-icons.min.css">
 <style>
@@ -211,11 +214,11 @@ body{
 </div>
 
 
-<div class="bm-banner" id="bmBanner" onclick="document.getElementById('bmModal').classList.add('active')">
-  <div class="bm-banner-icon"><i class="ti ti-bookmark-plus"></i></div>
+<div class="bm-banner" id="bmBanner" onclick="installApp()">
+  <div class="bm-banner-icon"><i class="ti ti-device-mobile-plus"></i></div>
   <div class="bm-banner-text">
     <strong>ホーム画面に追加</strong>
-    ブックマークしておくと次回すぐ開けます
+    <span id="bmSub">タップするとアプリのように使えます</span>
   </div>
   <button class="bm-close" onclick="event.stopPropagation();dismissBanner()" title="閉じる">&times;</button>
 </div>
@@ -598,6 +601,38 @@ function dismissBanner(){
   try{if(localStorage.getItem('bm-dismissed')==='1'){document.getElementById('bmBanner').style.display='none'}}catch(e){}
   if(window.matchMedia('(display-mode: standalone)').matches){document.getElementById('bmBanner').style.display='none'}
 })();
+
+// ===== PWA: ボタンでホーム画面に追加 =====
+var deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();          // 既定のミニバーを抑止し、自前ボタンで出す
+  deferredPrompt = e;
+  var sub = document.getElementById('bmSub'); if(sub) sub.textContent = 'ワンタップで追加できます';
+});
+window.addEventListener('appinstalled', function(){
+  deferredPrompt = null;
+  var b = document.getElementById('bmBanner'); if(b) b.style.display = 'none';
+});
+function isIOS(){
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+function installApp(){
+  if(deferredPrompt){           // Android/Chrome等: その場でネイティブ追加
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(c){
+      if(c && c.outcome === 'accepted'){ var b=document.getElementById('bmBanner'); if(b) b.style.display='none'; }
+      deferredPrompt = null;
+    });
+  } else {                      // iPhone/Safari・対応外: 追加手順モーダル
+    document.getElementById('bmModal').classList.add('active');
+  }
+}
+(function(){ if(isIOS()){ var s=document.getElementById('bmSub'); if(s) s.textContent='タップで追加方法を表示'; } })();
+// Service Worker（インストール可能化＋オフラインでもシェルが開く）
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
 </script>
 
 <div class="drive-overlay" id="driveOverlay">
